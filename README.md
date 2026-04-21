@@ -1,24 +1,26 @@
-
-# journal
-to gather my thoughts
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-# Frictionless Journal (MVP)
->>>>>>> 608ae1d (Build V1 frictionless journaling MVP)
+# Frictionless Journal
 
 Mobile-first journaling web app built with Next.js App Router, TypeScript, Tailwind CSS, Prisma, and PostgreSQL.
 
-## Current MVP Scope
+## MVP + V1.1 Scope
 
-- Chat-like journaling UI with bottom-anchored input
+- Chat-like journaling UI with a bottom-anchored input
 - Entry submission captures:
   - Raw text
   - UTC timestamp
-  - Geolocation (latitude/longitude), with graceful null fallback if denied/unavailable
-- API endpoint at `POST /api/entries`
+  - Geolocation (latitude/longitude), with graceful `null` fallback if denied/unavailable
+- API endpoints:
+  - `POST /api/entries` to create an entry
+  - `GET /api/entries` to load recent entries
 - PostgreSQL persistence via Prisma `Entry` model
-- Feed of recent entries loaded from `GET /api/entries`
+- Shared request validation (`zod`) on both client and server
+- Optimistic UI for entry creation
+- Basic API rate limiting for create requests
+- Auth.js authentication with Google and optional email magic links
+- User-owned entries (`Entry.userId`) scoped per authenticated user
+- Structured error logs for entry load/save and geolocation failures
+- Data quality guardrails (length cap + simple profanity/spam checks)
+- Timezone-aware timestamp display in the client
 
 ## Tech Stack
 
@@ -36,13 +38,25 @@ Mobile-first journaling web app built with Next.js App Router, TypeScript, Tailw
 npm install
 ```
 
-2. Create env file:
+2. Create a `.env` file and set `DATABASE_URL` to your PostgreSQL connection string.
+
+3. Add auth environment variables:
 
 ```bash
-cp .env.example .env
+AUTH_SECRET=replace-with-random-secret
+AUTH_GOOGLE_ID=your-google-oauth-client-id
+AUTH_GOOGLE_SECRET=your-google-oauth-client-secret
 ```
 
-3. Set `DATABASE_URL` in `.env` to your PostgreSQL instance.
+Optional email magic link setup:
+
+```bash
+EMAIL_SERVER_HOST=smtp.example.com
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER=username
+EMAIL_SERVER_PASSWORD=password
+EMAIL_FROM=no-reply@example.com
+```
 
 4. Generate Prisma client:
 
@@ -63,33 +77,3 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
-
-## Prisma Model
-
-The `Entry` model includes:
-
-- `id` (UUID)
-- `rawText` (string)
-- `latitude` (nullable float)
-- `longitude` (nullable float)
-- `createdAt` (datetime)
-- `aiMetadata` (JSONB, default empty object)
-
-## Notes
-
-<<<<<<< HEAD
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
->>>>>>> 70ca90e (Initial commit from Create Next App)
-=======
-- Without a running PostgreSQL database, API persistence will not work yet.
-- This repository is source-complete for the requested V1 MVP; infra/deployment can be added next.
->>>>>>> 608ae1d (Build V1 frictionless journaling MVP)
